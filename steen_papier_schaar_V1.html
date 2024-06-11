@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steen Papier Schaar</title>
+</head>
+<body>
+    <h1>Steen Papier Schaar</h1>
+    <button id="rock">Steen</button>
+    <button id="paper">Papier</button>
+    <button id="scissors">Schaar</button>
+    <p>Jouw keuze: <span id="human-choice"></span></p>
+    <p>Computer keuze: <span id="computer-choice"></span></p>
+    <p>Resultaat: <span id="result"></span></p>
+
+    <script>
+        const rockButton = document.querySelector('#rock');
+        const paperButton = document.querySelector('#paper');
+        const scissorsButton = document.querySelector('#scissors');
+        const humanChoiceSpan = document.querySelector('#human-choice');
+        const computerChoiceSpan = document.querySelector('#computer-choice');
+        const resultSpan = document.querySelector('#result');
+        
+        // Definieer de variabele voor de keuze van de gebruiker
+        let humanChoice;
+        
+        // Voeg event listeners toe voor de knoppen
+        rockButton.addEventListener('click', function() {
+            humanChoice = 'Steen';
+            humanChoiceSpan.innerHTML = humanChoice;
+            playGame();
+        });
+        
+        paperButton.addEventListener('click', function() {
+            humanChoice = 'Papier';
+            humanChoiceSpan.innerHTML = humanChoice;
+            playGame();
+        });
+        
+        scissorsButton.addEventListener('click', function() {
+            humanChoice = 'Schaar';
+            humanChoiceSpan.innerHTML = humanChoice;
+            playGame();
+        });
+        
+       // Functie om het spel te spelen
+        function playGame() {
+            const choices = ['Steen', 'Papier', 'Schaar'];
+            const computerChoice = choices[Math.floor(Math.random() * 3)];
+            computerChoiceSpan.innerHTML = computerChoice;
+        
+            let result;
+            if (humanChoice === computerChoice) {
+                result = 'Gelijkspel';
+            } else if (
+                (humanChoice === 'Steen' && computerChoice === 'Schaar') ||
+                (humanChoice === 'Papier' && computerChoice === 'Steen') ||
+                (humanChoice === 'Schaar' && computerChoice === 'Papier')
+            ) {
+                result = 'Jij wint!';
+            } else {
+                result = 'Computer wint!';
+            }
+            resultSpan.innerHTML = result;
+        }
+        </script>
+</body>
+</html>

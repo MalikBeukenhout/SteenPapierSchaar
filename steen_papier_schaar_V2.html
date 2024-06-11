@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steen Papier Schaar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .keuze {
+            font-size: 24px;
+            padding: 10px 20px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Steen Papier Schaar</h1>
+    <button class="keuze" data-keuze="Steen">
+        <i class="fas fa-hand-rock"></i> Steen
+    </button>
+    <button class="keuze" data-keuze="Papier">
+        <i class="fas fa-hand-paper"></i> Papier
+    </button>
+    <button class="keuze" data-keuze="Schaar">
+        <i class="fas fa-hand-scissors"></i> Schaar
+    </button>
+    <p>Jouw keuze: <span id="mens-keuze"></span></p>
+    <p>Computer keuze: <span id="computer-keuze"></span></p>
+    <p>Resultaat: <span id="resultaat"></span></p>
+
+    <script>
+        // Selecteer alle knoppen met class 'keuze'
+        const keuzeKnoppen = document.querySelectorAll('.keuze');
+        const mensKeuzeSpan = document.querySelector('#mens-keuze');
+        const computerKeuzeSpan = document.querySelector('#computer-keuze');
+        const resultaatSpan = document.querySelector('#resultaat');
+
+        // Functie om het spel te spelen
+        const speelSpel = (mensKeuze) => {
+            mensKeuzeSpan.innerHTML = mensKeuze;
+            const keuzes = ['Steen', 'Papier', 'Schaar'];
+            const computerKeuze = keuzes[Math.floor(Math.random() * 3)];
+            computerKeuzeSpan.innerHTML = computerKeuze;
+
+            let resultaat;
+
+            // Gebruik een switch statement om het resultaat te bepalen
+            switch (mensKeuze) {
+                case 'Steen':
+                    switch (computerKeuze) {
+                        case 'Steen':
+                            resultaat = 'Gelijkspel';
+                            break;
+                        case 'Papier':
+                            resultaat = 'Computer wint!';
+                            break;
+                        case 'Schaar':
+                            resultaat = 'Jij wint!';
+                            break;
+                    }
+                    break;
+                case 'Papier':
+                    switch (computerKeuze) {
+                        case 'Steen':
+                            resultaat = 'Jij wint!';
+                            break;
+                        case 'Papier':
+                            resultaat = 'Gelijkspel';
+                            break;
+                        case 'Schaar':
+                            resultaat = 'Computer wint!';
+                            break;
+                    }
+                    break;
+                case 'Schaar':
+                    switch (computerKeuze) {
+                        case 'Steen':
+                            resultaat = 'Computer wint!';
+                            break;
+                        case 'Papier':
+                            resultaat = 'Jij wint!';
+                            break;
+                        case 'Schaar':
+                            resultaat = 'Gelijkspel';
+                            break;
+                    }
+                    break;
+            }
+
+            resultaatSpan.innerHTML = resultaat;
+        }
+
+        // Voeg een enkele event listener toe voor alle knoppen
+        keuzeKnoppen.forEach(knop => {
+            knop.addEventListener('click', (event) => {
+                const mensKeuze = event.target.getAttribute('data-keuze');
+                speelSpel(mensKeuze);
+            });
+        });
+    </script>
+</body>
+</html>
