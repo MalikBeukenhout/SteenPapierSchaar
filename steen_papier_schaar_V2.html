@@ -6,27 +6,93 @@
     <title>Steen Papier Schaar</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
         .keuze {
-            font-size: 24px;
+            font-size: 1.5rem;
             padding: 10px 20px;
-            margin: 5px;
+            margin: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .keuze:hover {
+            background-color: #45a049;
+        }
+
+        .resultaat {
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+
+        #final-resultaat {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .score {
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
+        .win-animation {
+            animation: winAnimation 0.5s ease-in-out;
+            color: gold;
+        }
+
+        @keyframes winAnimation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
 <body>
-    <h1>Steen Papier Schaar</h1>
-    <button class="keuze" data-keuze="Steen">
-        <i class="fas fa-hand-rock"></i> Steen
-    </button>
-    <button class="keuze" data-keuze="Papier">
-        <i class="fas fa-hand-paper"></i> Papier
-    </button>
-    <button class="keuze" data-keuze="Schaar">
-        <i class="fas fa-hand-scissors"></i> Schaar
-    </button>
-    <p>Jouw keuze: <span id="mens-keuze"></span></p>
-    <p>Computer keuze: <span id="computer-keuze"></span></p>
-    <p>Resultaat: <span id="resultaat"></span></p>
+    <div class="container">
+        <h1>Steen Papier Schaar</h1>
+        <button class="keuze" data-keuze="Steen">
+            <i class="fas fa-hand-rock"></i> Steen
+        </button>
+        <button class="keuze" data-keuze="Papier">
+            <i class="fas fa-hand-paper"></i> Papier
+        </button>
+        <button class="keuze" data-keuze="Schaar">
+            <i class="fas fa-hand-scissors"></i> Schaar
+        </button>
+        <p>Jouw keuze: <span id="mens-keuze"></span></p>
+        <p>Computer keuze: <span id="computer-keuze"></span></p>
+        <p class="resultaat">Resultaat: <span id="resultaat"></span></p>
+        <p class="score">Score: Jij <span id="mens-score">0</span> - <span id="computer-score">0</span> Computer</p>
+        <p id="final-resultaat"></p>
+    </div>
 
     <script>
         // Selecteer alle knoppen met class 'keuze'
@@ -34,6 +100,12 @@
         const mensKeuzeSpan = document.querySelector('#mens-keuze');
         const computerKeuzeSpan = document.querySelector('#computer-keuze');
         const resultaatSpan = document.querySelector('#resultaat');
+        const mensScoreSpan = document.querySelector('#mens-score');
+        const computerScoreSpan = document.querySelector('#computer-score');
+        const finalResultaatSpan = document.querySelector('#final-resultaat');
+
+        let mensScore = 0;
+        let computerScore = 0;
 
         // Functie om het spel te spelen
         const speelSpel = (mensKeuze) => {
@@ -53,9 +125,11 @@
                             break;
                         case 'Papier':
                             resultaat = 'Computer wint!';
+                            computerScore++;
                             break;
                         case 'Schaar':
                             resultaat = 'Jij wint!';
+                            mensScore++;
                             break;
                     }
                     break;
@@ -63,12 +137,14 @@
                     switch (computerKeuze) {
                         case 'Steen':
                             resultaat = 'Jij wint!';
+                            mensScore++;
                             break;
                         case 'Papier':
                             resultaat = 'Gelijkspel';
                             break;
                         case 'Schaar':
                             resultaat = 'Computer wint!';
+                            computerScore++;
                             break;
                     }
                     break;
@@ -76,9 +152,11 @@
                     switch (computerKeuze) {
                         case 'Steen':
                             resultaat = 'Computer wint!';
+                            computerScore++;
                             break;
                         case 'Papier':
                             resultaat = 'Jij wint!';
+                            mensScore++;
                             break;
                         case 'Schaar':
                             resultaat = 'Gelijkspel';
@@ -88,7 +166,20 @@
             }
 
             resultaatSpan.innerHTML = resultaat;
-        }
+            mensScoreSpan.innerHTML = mensScore;
+            computerScoreSpan.innerHTML = computerScore;
+
+            // Controleer of iemand heeft gewonnen
+            if (mensScore === 2 || computerScore === 2) {
+                finalResultaatSpan.innerHTML = mensScore === 2 ? 'Gefeliciteerd! Jij hebt gewonnen!' : 'Helaas! De computer heeft gewonnen!';
+                finalResultaatSpan.classList.add('win-animation'); // Voeg animatieklasse toe bij winst
+                // Reset de scores voor een nieuwe wedstrijd
+                mensScore = 0;
+                computerScore = 0;
+                mensScoreSpan.innerHTML = mensScore;
+                computerScoreSpan.innerHTML = computerScore;
+            }
+        };
 
         // Voeg een enkele event listener toe voor alle knoppen
         keuzeKnoppen.forEach(knop => {
@@ -100,3 +191,4 @@
     </script>
 </body>
 </html>
+
